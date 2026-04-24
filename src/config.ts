@@ -1,79 +1,74 @@
-import dotenv from "dotenv"
-import path from "path"
-import { fileURLToPath } from "url"
+import dotenv from "dotenv";
 
-dotenv.config()
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+dotenv.config();
 
 export interface ServerConfig {
-  port: number
-  host: string
+  port: number;
+  host: string;
   ssl: {
-    enabled: boolean
-    cert?: string
-    key?: string
-  }
-  targets: TargetConfig[]
-  cache: CacheConfig
-  rateLimit: RateLimitConfig
-  loadBalancer: LoadBalancerConfig
-  logging: LogConfig
-  websocket: WebSocketConfig
+    enabled: boolean;
+    cert?: string;
+    key?: string;
+  };
+  targets: TargetConfig[];
+  cache: CacheConfig;
+  rateLimit: RateLimitConfig;
+  loadBalancer: LoadBalancerConfig;
+  logging: LogConfig;
+  websocket: WebSocketConfig;
 }
 
 export interface TargetConfig {
-  host: string
-  port: number
-  protocol: "http" | "https"
-  weight?: number
-  healthCheck?: HealthCheckConfig
+  host: string;
+  port: number;
+  protocol: "http" | "https";
+  weight?: number;
+  healthCheck?: HealthCheckConfig;
 }
 
 export interface HealthCheckConfig {
-  path: string
-  interval: number
-  timeout: number
-  retries: number
+  path: string;
+  interval: number;
+  timeout: number;
+  retries: number;
 }
 
 export interface CacheConfig {
-  enabled: boolean
-  ttl: number
-  maxSize: number
+  enabled: boolean;
+  ttl: number;
+  maxSize: number;
   redis?: {
-    enabled: boolean
-    url: string
-    password?: string
-  }
+    enabled: boolean;
+    url: string;
+    password?: string;
+  };
 }
 
 export interface RateLimitConfig {
-  enabled: boolean
-  windowMs: number
-  maxRequests: number
-  keyPrefix: string
+  enabled: boolean;
+  windowMs: number;
+  maxRequests: number;
+  keyPrefix: string;
 }
 
 export interface LoadBalancerConfig {
-  algorithm: "round-robin" | "least-connections" | "ip-hash" | "random"
-  healthCheckInterval: number
+  algorithm: "round-robin" | "least-connections" | "ip-hash" | "random";
+  healthCheckInterval: number;
 }
 
 export interface LogConfig {
-  level: string
-  format: "json" | "pretty"
-  output: string
+  level: string;
+  format: "json" | "pretty";
+  output: string;
 }
 
 export interface WebSocketConfig {
-  enabled: boolean
-  heartbeatInterval: number
+  enabled: boolean;
+  heartbeatInterval: number;
 }
 
 function parseTargets(): TargetConfig[] {
-  const targetsEnv = process.env.PROXY_TARGETS
+  const targetsEnv = process.env.PROXY_TARGETS;
   if (!targetsEnv) {
     return [
       {
@@ -82,21 +77,21 @@ function parseTargets(): TargetConfig[] {
         protocol: "http",
         weight: 1,
       },
-    ]
+    ];
   }
 
   try {
-    return JSON.parse(targetsEnv)
+    return JSON.parse(targetsEnv);
   } catch {
     return targetsEnv.split(",").map((target) => {
-      const [host, port] = target.trim().split(":")
+      const [host, port] = target.trim().split(":");
       return {
         host: host || "localhost",
         port: parseInt(port) || 80,
         protocol: "http" as const,
         weight: 1,
-      }
-    })
+      };
+    });
   }
 }
 
@@ -127,7 +122,9 @@ export const config: ServerConfig = {
   },
   loadBalancer: {
     algorithm: (process.env.LB_ALGORITHM as any) || "round-robin",
-    healthCheckInterval: parseInt(process.env.LB_HEALTH_CHECK_INTERVAL || "30000"),
+    healthCheckInterval: parseInt(
+      process.env.LB_HEALTH_CHECK_INTERVAL || "30000",
+    ),
   },
   logging: {
     level: process.env.LOG_LEVEL || "info",
@@ -138,6 +135,6 @@ export const config: ServerConfig = {
     enabled: process.env.WS_ENABLED !== "false",
     heartbeatInterval: parseInt(process.env.WS_HEARTBEAT_INTERVAL || "30000"),
   },
-}
+};
 
-export default config
+export default config;
