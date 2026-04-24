@@ -1,0 +1,60 @@
+{
+  "name": "shadow-proxy",
+  "version": "1.0.0",
+  "description": "High-performance HTTP/HTTPS proxy server with caching, load balancing, and rate limiting",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx watch src/index.ts",
+    "start": "node dist/index.js",
+    "test": "vitest",
+    "lint": "eslint src/**/*.ts",
+    "format": "prettier --write src/**/*.ts"
+  },
+  "keywords": [
+    "proxy",
+    "http-proxy",
+    "load-balancer",
+    "cache",
+    "rate-limiter",
+    "shadow-dominion"
+  ],
+  "author": "techflowmb-creator",
+  "license": "MIT",
+  "dependencies": {
+    "http-proxy": "^1.18.1",
+    "ioredis": "^5.4.1",
+    "lru-cache": "^11.0.0",
+    "rate-limiter-flexible": "^5.0.5",
+    "winston": "^3.17.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "cors": "^2.8.5",
+    "helmet": "^8.0.0",
+    "compression": "^1.7.4"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/http-proxy": "^1.17.15",
+    "@types/express": "^5.0.0",
+    "@types/cors": "^2.8.17",
+    "@types/compression": "^1.7.5",
+    "typescript": "^5.5.0",
+    "tsx": "^4.19.0",
+    "vitest": "^2.1.0",
+    "eslint": "^9.13.0",
+    "prettier": "^3.3.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/techflowmb-creator/shadow-proxy.git"
+  },
+  "bugs": {
+    "url": "https://github.com/techflowmb-creator/shadow-proxy/issues"
+  },
+  "homepage": "https://github.com/techflowmb-creator/shadow-proxy#readme"
+}
